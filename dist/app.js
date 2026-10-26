@@ -7,3 +7,21 @@ const reduced=matchMedia('(prefers-reduced-motion: reduce)');const observe=new I
 const splash=document.getElementById('brandLoader');function finishLoading(){if(splash){splash.classList.add('loaded');splash.setAttribute('aria-hidden','true');setTimeout(()=>splash.remove(),450)}}if(document.readyState==='complete')finishLoading();else window.addEventListener('load',finishLoading,{once:true});setTimeout(finishLoading,4000);
 
 document.getElementById('showYape').onclick=()=>document.getElementById('yapeDialog').showModal();
+
+/* Colección destacada: carrusel táctil y navegación accesible. */
+const featured=document.createElement('section');
+featured.className='featured';
+featured.setAttribute('aria-label','Ideas destacadas');
+featured.innerHTML=`<div class="featured-heading"><div><span class="eyebrow">DESLIZA Y ENCUENTRA TU IDEA</span><h2>Un poquito de inspiración ✦</h2></div><div class="carousel-controls"><button type="button" aria-label="Ver anteriores">←</button><button type="button" aria-label="Ver siguientes">→</button></div></div><div class="carousel-track" tabindex="0" aria-label="Productos destacados, desliza para explorar">${[3,201,113,202,10,203].map(id=>{const p=products.find(x=>x.id===id);return `<button class="feature-card" type="button" data-feature="${id}"><img loading="lazy" src="${p.image}" alt="${p.name}"><span class="feature-caption"><small>${p.cat}</small><strong>${p.name}</strong><span>Personalizar ↗</span></span></button>`}).join('')}</div><p class="swipe-hint">Desliza para explorar · Toca un diseño para personalizarlo</p>`;
+document.querySelector('.ribbon').after(featured);
+const track=featured.querySelector('.carousel-track');
+featured.querySelectorAll('[data-feature]').forEach(b=>b.onclick=()=>detail(+b.dataset.feature));
+featured.querySelectorAll('.carousel-controls button').forEach((b,i)=>b.onclick=()=>track.scrollBy({left:(i?1:-1)*track.clientWidth*.8,behavior:reduced.matches?'instant':'smooth'}));
+track.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();track.scrollBy({left:(e.key==='ArrowRight'?1:-1)*300,behavior:reduced.matches?'instant':'smooth'})}});
+const menu=document.createElement('button');menu.type='button';menu.className='mobile-menu';menu.textContent='☰';menu.setAttribute('aria-label','Abrir menú');menu.setAttribute('aria-expanded','false');menu.setAttribute('aria-controls','mainNav');
+const navigation=document.querySelector('header nav');navigation.id='mainNav';
+document.querySelector('header').insertBefore(menu,document.getElementById('openBag'));
+function closeMobileMenu(){navigation.classList.remove('nav-open');menu.setAttribute('aria-expanded','false');menu.textContent='☰'}
+menu.onclick=()=>{const open=navigation.classList.toggle('nav-open');menu.setAttribute('aria-expanded',String(open));menu.textContent=open?'×':'☰'};
+navigation.querySelectorAll('a,button').forEach(a=>a.addEventListener('click',closeMobileMenu));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMobileMenu()});
