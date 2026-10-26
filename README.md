@@ -11,4 +11,3 @@ No hay pasarela de pago ni verificación automática de Yape. La coordinación y
 ## Editar
 Productos y variantes: `dist/app.js`. Textos y contactos: `dist/index.html`. Apariencia: `dist/style.css`. Fotos: `dist/assets/`.
 No subir capturas privadas de conversación, credenciales ni comprobantes de clientes al repositorio.
-
