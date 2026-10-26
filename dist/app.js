@@ -5,3 +5,5 @@ const reduced=matchMedia('(prefers-reduced-motion: reduce)');const observe=new I
 
 // La carga acompaña la preparación real de la página, sin esperas artificiales.
 const splash=document.getElementById('brandLoader');function finishLoading(){if(splash){splash.classList.add('loaded');splash.setAttribute('aria-hidden','true');setTimeout(()=>splash.remove(),450)}}if(document.readyState==='complete')finishLoading();else window.addEventListener('load',finishLoading,{once:true});setTimeout(finishLoading,4000);
+
+document.getElementById('showYape').onclick=()=>document.getElementById('yapeDialog').showModal();
